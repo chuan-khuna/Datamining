@@ -50,18 +50,32 @@ class LinearRegression:
         iterations = np.arange(0, self.max_iteration+1, 1)
         plt.plot(iterations, self.costs, 'b.')
         plt.plot(iterations, self.costs)
-        plt.grid(True, alpha=0.5)
         plt.xlabel("iteration")
         plt.ylabel("error cost")
+        plt.grid(True, alpha=0.5)
+        plt.show()
+
+    def plot_scatter_model(self):
+        plt.plot(self.x, self.expected_y, 'r.', label='expected')
+        plt.plot(self.x, self.predicted_y, 'b-', label='predicted')
+        plt.xlabel('x')
+        plt.ylabel('y')
+        plt.legend()
+        plt.grid(True, alpha=0.5)
         plt.show()
 
 
 if __name__ == "__main__":
-    num_point = 100
-    max_iteration = 100
-    x = np.linspace(0, 10, num_point)
+    num_sample = 100
+    min_x = 0
+    max_x = 10
+    max_iteration = 500
+    learning_rate = 0.0001
+
+    x = np.linspace(min_x, max_x, num_sample)
     y = 2*x + 5
 
-    lr = LinearRegression(x, y, learning_rate=0.0005, max_iteration=max_iteration)
+    lr = LinearRegression(x, y, learning_rate=learning_rate, max_iteration=max_iteration)
     lr.linear_regression()
     lr.plot_cost_iteration()
+    lr.plot_scatter_model()
