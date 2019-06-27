@@ -67,13 +67,15 @@ class LinearRegression:
 
 if __name__ == "__main__":
     num_sample = 100
+    max_iteration = 100
+    learning_rate = 0.0001
+    # y = mx + c
+    m = 2       # slope
+    c = 5       # constant
     min_x = 0
     max_x = 10
-    max_iteration = 500
-    learning_rate = 0.0001
-
     x = np.linspace(min_x, max_x, num_sample)
-    y = 2*x + 5
+    y = m*x + c + np.random.randn(num_sample)
 
     lr = LinearRegression(x, y, learning_rate=learning_rate, max_iteration=max_iteration)
     lr.linear_regression()
