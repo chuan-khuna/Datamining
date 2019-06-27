@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 class LinearRegression:
     def __init__(self, x, y, learning_rate=0.05, max_iteration=500):
@@ -8,6 +9,8 @@ class LinearRegression:
                 h = w0*x0 + w1*x1    ; x0 = 1, x1 = x from input
             cost funtion:
                 cost = 0.5 * sum_square(predict - expected)/m       ; m = number of y
+            gradient descent:
+                new_weight = old_weight - learning_rate*(sum( d * xi ))     ; d = predict - expected
         '''
         self.x = x
         self.expected_y = y
@@ -43,12 +46,22 @@ class LinearRegression:
             self.gradeint_desc()
         self.cal_cost()     # calculate last iteration cost
 
+    def plot_cost_iteration(self):
+        iterations = np.arange(0, self.max_iteration+1, 1)
+        plt.plot(iterations, self.costs, 'b.')
+        plt.plot(iterations, self.costs)
+        plt.grid(True, alpha=0.5)
+        plt.xlabel("iteration")
+        plt.ylabel("error cost")
+        plt.show()
+
 
 if __name__ == "__main__":
-    num_point = 10
-    x = np.linspace(0, 1, num_point)
-    y = 2*x + 1
-    lr = LinearRegression(x, y, learning_rate=0.1, max_iteration=100)
+    num_point = 100
+    max_iteration = 100
+    x = np.linspace(0, 10, num_point)
+    y = 2*x + 5
+
+    lr = LinearRegression(x, y, learning_rate=0.0005, max_iteration=max_iteration)
     lr.linear_regression()
-    print(lr.costs)
-    print(lr.parameters)
+    lr.plot_cost_iteration()
