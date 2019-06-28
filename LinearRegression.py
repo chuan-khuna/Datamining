@@ -49,6 +49,7 @@ class LinearRegression:
         self.cost_function()
 
     def plot_cost_iteration(self):
+        fig = plt.figure('cost-iteration plot')
         iterations = np.arange(0, self.max_iteration+1, 1)
         plt.plot(iterations, self.costs, 'b.')
         plt.plot(iterations, self.costs)
@@ -56,18 +57,19 @@ class LinearRegression:
         plt.xlabel("iteration")
         plt.ylabel("error cost")
         plt.grid(True, alpha=0.5)
-        plt.show()
 
     def plot_scatter_model(self):
+        fig = plt.figure('predicted vs expercted plot')
         plt.plot(self.x, self.expected_y, 'r.', label='expected')
         plt.plot(self.x, self.predicted_y, 'b-', label='predicted: h = {}x + {}'.format(round(self.parameters[-1][1], 3), round(self.parameters[-1][0], 3)))
+        plt.title('Predicted vs Expected')
         plt.xlabel('x')
         plt.ylabel('y')
         plt.legend()
         plt.grid(True, alpha=0.5)
-        plt.show()
 
     def contour_plot(self, grid_res=100):
+        fig = plt.figure('cost contour plot')
         # prepare data for contour plot
         parameters = np.array(self.parameters)
         w0 = parameters[:, 0]
@@ -103,10 +105,8 @@ class LinearRegression:
         plt.xlabel('w0')
         plt.ylabel('w1')
         plt.legend()
-        plt.show()
 
-
-
+        
 if __name__ == "__main__":
     num_sample = 100
     max_iteration = 1000
@@ -121,6 +121,7 @@ if __name__ == "__main__":
 
     lr = LinearRegression(x, y, learning_rate=learning_rate, max_iteration=max_iteration)
     lr.linear_regression()
-    # lr.plot_cost_iteration()
-    # lr.plot_scatter_model()
+    lr.plot_cost_iteration()
+    lr.plot_scatter_model()
     lr.contour_plot()
+    plt.show()
