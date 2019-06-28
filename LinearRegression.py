@@ -67,44 +67,49 @@ class LinearRegression:
         plt.grid(True, alpha=0.5)
         plt.show()
 
-    def contour_plot(self):
+    def contour_plot(self, grid_res=100):
         # prepare data for contour plot
         parameters = np.array(self.parameters)
         w0 = parameters[:, 0]
         w1 = parameters[:, 1]
         w0_min,w0_max = np.amin(w0),np.amax(w0)
         w1_min,w1_max = np.amin(w1),np.amax(w1)
-        costs = np.array(self.costs)
+        
         # contour plot coordinate
-        grid_res = 100
-        x0 = np.linspace(w0_min/2, w0_max*2, grid_res)
-        x1 = np.linspace(w1_min/2, w1_max*2, grid_res)
+        x0 = np.linspace(w0_min/1.5, w0_max*1.5, grid_res)
+        x1 = np.linspace(w1_min/1.5, w1_max*1.5, grid_res)
         X0, X1 = np.meshgrid(x0, x1)
-        cost_grid = np.zeros(shape=(x0.size, x1.size))
-        levels = np.unique(np.sort(costs))
-
+        costs = np.zeros(shape=(x0.size, x1.size))
         # calculate cost grid
         for i, v0 in enumerate(x0):
             for j, v1 in enumerate(x1):
                 predicted = self.x*v1 + v0
                 cost = np.sum((predicted - self.expected_y)**2)
-                cost = round(0.5*cost/len(predicted), 1)
-                cost_grid[i][j] = cost
+                costs[i][j] = round(0.5*cost/len(predicted), 1)
+        levels = np.unique(np.sort(costs))
 
+        # color
+        cm = plt.cm.get_cmap('plasma')
+        # contour bg color
+        contour = plt.contourf(x0, x1, costs, alpha=0.25, cmap=cm)
         # contour line
-        # contour = plt.contour(X0, X1, cost_grid, levels, cmap=plt.get_cmap('cool_r'), alpha=0.8)
-        contour = plt.contourf(x0, x1, cost_grid, levels,)
+        contour = plt.contour(x0, x1, costs, linestyles='dashed', colors='black')
+        plt.clabel(contour, inline=1, fontsize=10)
 
         # plot parameters
-        plt.scatter(w0, w1)
+        plt.plot(w0, w1, 'r')
+        plt.plot(w0, w1, 'r.', label="learning rate: {}".format(self.learning_rate))
+        plt.title('Contour plot of Linear Regression & Gradient Descent'.format(self.learning_rate))
         plt.xlabel('w0')
         plt.ylabel('w1')
+        plt.legend()
         plt.show()
+
 
 
 if __name__ == "__main__":
     num_sample = 100
-    max_iteration = 100
+    max_iteration = 1000
     learning_rate = 0.0001
     # y = mx + c
     m = 2       # slope
@@ -116,6 +121,6 @@ if __name__ == "__main__":
 
     lr = LinearRegression(x, y, learning_rate=learning_rate, max_iteration=max_iteration)
     lr.linear_regression()
-    lr.plot_cost_iteration()
-    lr.plot_scatter_model()
+    # lr.plot_cost_iteration()
+    # lr.plot_scatter_model()
     lr.contour_plot()
