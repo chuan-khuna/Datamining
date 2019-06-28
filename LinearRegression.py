@@ -13,7 +13,7 @@ class LinearRegression:
 
     def cal_predicted_y(self):
         """
-            calculate predicted y  ==> h(x)
+            Calculate predicted y  ==> h(x)
 
             model (hypothesis):
                 h = w1*x1  + w0*x0      ; x0 = 1, x1 = input x
@@ -23,7 +23,7 @@ class LinearRegression:
     
     def cost_function(self):
         """
-            calculate error cost of current model
+            Calculate error cost of current model
 
             cost = 1/2 * sum_square( predicted - expected )/m       ; m = number of sample
         """
@@ -36,7 +36,7 @@ class LinearRegression:
 
     def gradient_descent(self):
         """
-            adjust parameter by gradient descent method
+            Adjust parameter by gradient descent method
 
             new_weight = old_weight - learning_rate * ( sum(d * xi) )       ; d = predicted - expected
         """
@@ -44,7 +44,7 @@ class LinearRegression:
                 (self.predicted_y - self.expected_y) 
             )
         w1 = self.parameters[-1][1] - self.learning_rate * np.sum(
-                (self.predicted_y - self.expected_y)*x 
+                (self.predicted_y - self.expected_y)*self.x 
             )
         w0 = round(w0, 4)
         w1 = round(w1, 4)
@@ -72,9 +72,9 @@ if __name__ == "__main__":
     max_x = 10
     x = np.linspace(min_x, max_x, num_sample)
     y = m*x + c + np.random.randn(num_sample)
-    print("expected y = {}x + {} + (random noise)".format(m, c))
+    print("Expected y = {}x + {} + (random noise)".format(m, c))
 
     # Linear Regression
     lr = LinearRegression(x, y, learning_rate=learning_rate, max_iteration=max_iteration)
-    print("hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
-    print("cost: {}".format(lr.costs[-1]))
+    print("Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
+    print("Cost: {}".format(lr.costs[-1]))
