@@ -24,7 +24,7 @@ class LinearRegression:
     def cal_predicted_y(self):
         self.predicted_y = x*self.parameters[-1][1] + self.parameters[-1][0]
 
-    def cal_cost(self):
+    def cost_function(self):
         sum_square = np.sum(
             (self.predicted_y-self.expected_y)**2
         )
@@ -42,14 +42,17 @@ class LinearRegression:
     def linear_regression(self):
         for i in range(1, self.max_iteration+1):
             self.cal_predicted_y()
-            self.cal_cost()
+            self.cost_function()
             self.gradeint_desc()
-        self.cal_cost()     # calculate last iteration cost
+        # calculate last iteration cost and predicted
+        self.cal_predicted_y()
+        self.cost_function()
 
     def plot_cost_iteration(self):
         iterations = np.arange(0, self.max_iteration+1, 1)
         plt.plot(iterations, self.costs, 'b.')
         plt.plot(iterations, self.costs)
+        plt.title('Learning Rate: {}'.format(self.learning_rate))
         plt.xlabel("iteration")
         plt.ylabel("error cost")
         plt.grid(True, alpha=0.5)
@@ -57,7 +60,7 @@ class LinearRegression:
 
     def plot_scatter_model(self):
         plt.plot(self.x, self.expected_y, 'r.', label='expected')
-        plt.plot(self.x, self.predicted_y, 'b-', label='predicted')
+        plt.plot(self.x, self.predicted_y, 'b-', label='predicted: h = {}x + {}'.format(round(self.parameters[-1][1], 3), round(self.parameters[-1][0], 3)))
         plt.xlabel('x')
         plt.ylabel('y')
         plt.legend()
