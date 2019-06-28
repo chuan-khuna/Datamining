@@ -14,8 +14,8 @@ class Visualization:
         self.parameters = np.array(self.lr.parameters)
         self.alpha = self.lr.learning_rate
 
-    def animation(self, delay=0.01):
-        fig = fig = plt.figure('Linear Regression Animation')
+    def animation_expected_predicted(self, delay=0.001):
+        fig = plt.figure('Linear Regression Animation', figsize=(10, 5))
         plt.ion()
 
         for i, p in enumerate(self.parameters):
@@ -34,16 +34,137 @@ class Visualization:
                 self.alpha, i, self.costs[i]
             ))
             plt.legend()
+            plt.xlabel("x")
+            plt.ylabel("y")
             plt.grid(True, alpha=0.5)
-            plt .draw()
+            plt.draw()
             plt.pause(delay)
         plt.ioff()
         plt.show()
 
+    def animation_cost_iteration(self, delay=0.001):
+        fig = plt.figure("Cost-Iteration animation plot", figsize=(10, 5))
+        plt.ion()
+        for i, c in enumerate(self.costs):
+            plt.plot(i, c, 'b.')
+            plt.title("Alpha: {}, Iteration: {}, Cost: {}".format(
+                self.alpha, i, self.costs[i]
+            ))
+            plt.xlabel("Iteration")
+            plt.ylabel("Cost")
+            plt.grid(True, alpha=0.5)
+            plt.draw()
+            plt.pause(delay)
+        plt.plot(np.arange(0, max_iteration+1, 1), self.costs, 'b-')
+        plt.ioff()
+        plt.show()
+
+    def expected_predicted(self):
+        fig = plt.figure('Linear Regression', figsize=(10, 5))
+        expected = plt.plot(self.x, self.expected_y, 'r.', label='expected')
+        w0 = self.parameters[-1][0]
+        w1 = self.parameters[-1][1]
+        extend = 1
+        x = np.linspace(np.amin(self.x) - extend, np.amax(self.x) + extend, 100)
+        y = w1*x + w0
+        predicted = plt.plot(x, y, 'b-', label='predicted: h = {}x + {}'.format(w1, w0))
+
+        plt.title("Alpha: {}, Cost: {}, Iteration: {}".format(
+            self.alpha, self.costs[-1], len(self.parameters)-1
+        ))
+        plt.axis([np.amin(self.x) - extend, np.amax(self.x) + extend, 
+            np.amin(self.expected_y) - extend, np.amax(self.expected_y) + extend
+        ])
+        plt.legend()
+        plt.xlabel("x")
+        plt.ylabel("y")
+        plt.grid(True, alpha=0.5)
+
+    def cost_iteration(self):
+        fig = plt.figure("Cost-Iteration plot", figsize=(10, 5))
+        iterations = np.arange(0, max_iteration+1, 1)
+        plt.plot(iterations, self.costs, 'b.')
+        plt.plot(iterations, self.costs, 'b-')
+        plt.title("Alpha: {}".format(self.alpha))
+        plt.xlabel("Iteration")
+        plt.ylabel("Cost")
+        plt.grid(True, alpha=0.5)
+
+    def pcolor_cost(self, grid_res=100):
+        fig = plt.figure('Cost pcolor plot', figsize=(10, 5))
+
+        # model weight
+        w0 = self.parameters[:, 0]
+        w1 = self.parameters[:, 1]
+        w0_min,w0_max = np.amin(w0), np.amax(w0)
+        w1_min,w1_max = np.amin(w1), np.amax(w1)
+
+        extend = 2
+        # contour plot coordinate
+        x0 = np.linspace(w0_min-extend, w0_max+extend, grid_res)
+        x1 = np.linspace(w1_min-extend, w1_max+extend, grid_res)
+        costs = np.zeros(shape=(x0.size, x1.size))
+        # calculate cost of grid
+        for i, v0 in enumerate(x0):
+            for j, v1 in enumerate(x1):
+                predicted = self.x*v1 + v0
+                cost = np.sum((predicted - self.expected_y)**2)
+                costs[i][j] = round(0.5*cost/len(predicted), 1)
+
+        # color map
+        cm = plt.cm.get_cmap('Wistia')
+        # pcolor -> bg color
+        pcolor = plt.pcolormesh(x0, x1, costs, cmap=cm)
+        plt.colorbar(pcolor, pad=0.01)
+        plt.plot(w0, w1, 'b')
+        plt.plot(w0, w1, 'b.', label="Alpha: {}".format(self.alpha))
+        plt.title('Pcolor plot of Linear Regression & Gradient Descent'.format(self.alpha))
+        plt.xlabel('w0')
+        plt.ylabel('w1')
+        plt.legend()
+
+    def contour_cost(self, grid_res=100):
+        fig = plt.figure('Cost contour plot', figsize=(10, 5))
+
+        # model weight
+        w0 = self.parameters[:, 0]
+        w1 = self.parameters[:, 1]
+        w0_min,w0_max = np.amin(w0), np.amax(w0)
+        w1_min,w1_max = np.amin(w1), np.amax(w1)
+
+        extend = 2
+        # contour plot coordinate
+        x0 = np.linspace(w0_min-extend, w0_max+extend, grid_res)
+        x1 = np.linspace(w1_min-extend, w1_max+extend, grid_res)
+        costs = np.zeros(shape=(x0.size, x1.size))
+        # calculate cost of grid
+        for i, v0 in enumerate(x0):
+            for j, v1 in enumerate(x1):
+                predicted = self.x*v1 + v0
+                cost = np.sum((predicted - self.expected_y)**2)
+                costs[i][j] = round(0.5*cost/len(predicted), 4)
+        # round in 10
+        levels = np.unique(np.sort(np.round(costs, -1)))
+
+
+        # color map
+        cm = plt.cm.get_cmap('Wistia')
+
+        contour = plt.contour(x0, x1, costs, levels,colors='black', linestyles='dashed', alpha=0.5)
+        plt.clabel(contour, inline=1, fontsize=8)
+        contour_bg = plt.contourf(x0, x1, costs, levels, cmap=cm)
+
+        plt.plot(w0, w1, 'b')
+        plt.plot(w0, w1, 'b.', label="Alpha: {}".format(self.alpha))
+        plt.title('Contour plot of Linear Regression & Gradient Descent'.format(self.alpha))
+        plt.xlabel('w0')
+        plt.ylabel('w1')
+        plt.legend()
+
 
 if __name__ == "__main__":
     num_sample = 100
-    max_iteration = 1000
+    max_iteration = 100
     learning_rate = 0.0001
 
     # expected y = mx + c
@@ -59,6 +180,11 @@ if __name__ == "__main__":
     lr = LinearRegression(x, y, learning_rate=learning_rate, max_iteration=max_iteration)
     print("Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
     print("Cost: {}".format(lr.costs[-1]))
+    print("Initial cost:", lr.costs[0])
 
     vlr = Visualization(lr)
-    vlr.animation()
+    vlr.expected_predicted()
+    vlr.cost_iteration()
+    # vlr.pcolor_cost()
+    # vlr.contour_cost()
+    plt.show()
