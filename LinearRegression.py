@@ -106,11 +106,30 @@ class LinearRegression:
         plt.ylabel('w1')
         plt.legend()
 
-        
+    def animation_predicted_plot(self):
+        fig = plt.figure('Animation')
+        plt.ion()
+        for i, p in enumerate(self.parameters):
+            plt.clf()
+            scatter = plt.plot(self.x, self.expected_y, 'r.', label='expected')
+            w0 = p[0]
+            w1 = p[1]
+            x = np.linspace(np.amin(self.x), np.amax(self.x), 100)
+            y = w1*x + w0
+            predicted_line = plt.plot(x, y, 'b-', label='predicted: h = {}x + {}'.format(p[1], p[0]))
+            plt.axis([np.amin(self.x)-0.5, np.amax(self.x)+0.5, np.amin(self.expected_y)-0.5, np.amax(self.expected_y)+0.5])
+            plt.title('iteration: {}, cost: {}'.format(i, self.costs[i]))
+            plt.legend()
+            plt.grid(True, alpha=0.5)
+            plt.draw()
+            plt.pause(0.001)
+        plt.ioff() 
+        plt.show()
+
 if __name__ == "__main__":
     num_sample = 100
-    max_iteration = 1000
-    learning_rate = 0.0001
+    max_iteration = 100
+    learning_rate = 0.0005
     # y = mx + c
     m = 2       # slope
     c = 5       # constant
@@ -121,6 +140,7 @@ if __name__ == "__main__":
 
     lr = LinearRegression(x, y, learning_rate=learning_rate, max_iteration=max_iteration)
     lr.linear_regression()
+    lr.animation_predicted_plot()
     lr.plot_cost_iteration()
     lr.plot_scatter_model()
     lr.contour_plot()
