@@ -68,7 +68,7 @@ class LinearRegression:
         plt.legend()
         plt.grid(True, alpha=0.5)
 
-    def contour_plot(self, grid_res=100):
+    def pcolor_plot(self, grid_res=100):
         fig = plt.figure('cost contour plot')
         # prepare data for contour plot
         parameters = np.array(self.parameters)
@@ -76,10 +76,11 @@ class LinearRegression:
         w1 = parameters[:, 1]
         w0_min,w0_max = np.amin(w0),np.amax(w0)
         w1_min,w1_max = np.amin(w1),np.amax(w1)
+        W0, W1 = np.meshgrid(w0, w1)
         
         # contour plot coordinate
-        x0 = np.linspace(w0_min/1.5, w0_max*1.5, grid_res)
-        x1 = np.linspace(w1_min/1.5, w1_max*1.5, grid_res)
+        x0 = np.linspace(w0_min-1, w0_max+1, grid_res)
+        x1 = np.linspace(w1_min-1, w1_max+1, grid_res)
         X0, X1 = np.meshgrid(x0, x1)
         costs = np.zeros(shape=(x0.size, x1.size))
         # calculate cost grid
@@ -92,11 +93,11 @@ class LinearRegression:
 
         # color
         cm = plt.cm.get_cmap('plasma')
-        # contour bg color
-        contour = plt.contourf(x0, x1, costs, alpha=0.25, cmap=cm)
-        # contour line
-        contour = plt.contour(x0, x1, costs, linestyles='dashed', colors='black')
-        plt.clabel(contour, inline=1, fontsize=10)
+        # pcolor
+        cm = plt.cm.get_cmap('plasma')
+        # bg color
+        contour = plt.pcolor(X0, X1, costs, cmap=cm)
+        plt.colorbar(pad=0.01)
 
         # plot parameters
         plt.plot(w0, w1, 'r')
@@ -143,5 +144,5 @@ if __name__ == "__main__":
     lr.animation_predicted_plot()
     lr.plot_cost_iteration()
     lr.plot_scatter_model()
-    lr.contour_plot()
+    lr.pcolor_plot()
     plt.show()
