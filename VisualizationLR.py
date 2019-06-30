@@ -5,7 +5,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from LinearRegression import LinearRegression
 
 class Visualization:
-    def __init__(self, linear_regression_object):
+    def __init__(self, linear_regression_object, extend_axis=1):
         self.lr = linear_regression_object
         self.x = np.array(self.lr.x)
         self.expected_y = np.array(self.lr.expected_y)
@@ -13,7 +13,7 @@ class Visualization:
         self.costs = np.array(self.lr.costs)
         self.parameters = np.array(self.lr.parameters)
         self.alpha = self.lr.learning_rate
-        self.extend_axis = 1
+        self.extend_axis = extend_axis
 
     def animation_expected_predicted(self, delay=0.001):
         fig = plt.figure('Linear Regression Animation', figsize=(10, 5))
@@ -89,7 +89,7 @@ class Visualization:
         plt.ylabel("Cost")
         plt.grid(True, alpha=0.5)
 
-    def pcolor_cost(self, grid_res=100):
+    def pcolor_cost(self, grid_res=100, level_round=10):
         fig = plt.figure('Cost pcolor plot', figsize=(10, 5))
 
         # model weight
@@ -108,10 +108,20 @@ class Visualization:
                 predicted = self.x*v1 + v0
                 sse = np.sum((predicted - self.expected_y)**2)
                 costs[i][j] = round(0.5*sse/len(predicted), 4)
-        # round in 5
-        # levels = np.unique(np.sort(np.round(costs/5, 0)*5))
-        # round in 10
-        levels = np.unique(np.sort(np.round(costs, -1)))
+
+        if level_round == 10:
+            # round in 10
+            levels = np.unique(np.sort(np.round(costs, -1)))
+        elif level_round == 5:
+            # round in 5
+            levels = np.unique(np.sort(np.round(costs/5, 0)*5))
+        elif level_round == 1:
+            # round int
+            levels = np.unique(np.sort(np.round(costs)))
+        elif level_round == 0.25:
+            levels = np.unique(np.sort(np.round(costs/25, 2)*25))
+        else:
+            levels = np.unique(np.sort(np.round(costs, 1)))
 
         # color map
         cm = plt.cm.get_cmap('Wistia')
@@ -125,7 +135,7 @@ class Visualization:
         plt.ylabel('w1')
         plt.legend()
 
-    def contour_cost(self, grid_res=100):
+    def contour_cost(self, grid_res=100, level_round=10):
         fig = plt.figure('Cost contour plot', figsize=(10, 5))
 
         # model weight
@@ -144,10 +154,20 @@ class Visualization:
                 predicted = self.x*v1 + v0
                 sse = np.sum((predicted - self.expected_y)**2)
                 costs[i][j] = round(0.5*sse/len(predicted), 4)
-        # round in 5
-        # levels = np.unique(np.sort(np.round(costs/5, 0)*5))
-        # round in 10
-        levels = np.unique(np.sort(np.round(costs, -1)))
+
+        if level_round == 10:
+            # round in 10
+            levels = np.unique(np.sort(np.round(costs, -1)))
+        elif level_round == 5:
+            # round in 5
+            levels = np.unique(np.sort(np.round(costs/5, 0)*5))
+        elif level_round == 1:
+            # round int
+            levels = np.unique(np.sort(np.round(costs)))
+        elif level_round == 0.25:
+            levels = np.unique(np.sort(np.round(costs/25, 2)*25))
+        else:
+            levels = np.unique(np.sort(np.round(costs, 1)))
 
 
         # color map
