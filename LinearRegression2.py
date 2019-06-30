@@ -1,7 +1,7 @@
 import numpy as np
 
-class LinearRegression:
-    def __init__(self, x, expected_y, learning_rate=0.00001, max_iteration=50, initial_params=None):
+class LinearRegression2:
+    def __init__(self, x, expected_y, learning_rate=0.00001, max_iteration=500, initial_params=None):
         """
             xi = [x0 x1 ... xn]         ; n = number of attribute of x[i]
             x = [x1 x2 ..... xm]        ; m = number of sample
@@ -45,10 +45,10 @@ class LinearRegression:
 
             new_weight = old_weight - learning_rate * ( sum(d * xi) )       ; d = predicted - expected
         """
-        old_parameters = self.parameters[-1]
-        new_parameters = old_parameters - self.learning_rate * (self.predicted_y - self.expected_y).dot(self.x)
+        old_weights = self.parameters[-1]
+        new_weights = old_weights - self.learning_rate * (self.predicted_y - self.expected_y).dot(self.x)
 
-        self.parameters.append(new_parameters)
+        self.parameters.append(np.around(new_weights, 4))
     
     def linear_regression(self):
         for i in range(1, self.max_iteration+1):
@@ -73,7 +73,10 @@ if __name__ == "__main__":
     x = np.linspace(min_x, max_x, num_sample)
     X = np.array([[1, i] for i in x])
 
-    Y = X.dot(np.array([c, m]))
+    Y = X.dot(np.array([c, m])) + np.random.randn(num_sample)
+    # or y = m*x + c + np.random.randn(num_sample)
+    # or y = m*X[:, 1] + X[:, 0]*c + np.random.randn(num_sample)
+
     print("Expected y = {}x + {} + (random noise)".format(m, c))
 
     # Linear Regression
