@@ -103,11 +103,15 @@ class Visualization:
         x1 = np.linspace(w1_min-self.extend_axis, w1_max+self.extend_axis, grid_res)
         costs = np.zeros(shape=(x0.size, x1.size))
         # calculate cost of grid
-        for i, v0 in enumerate(x0):
-            for j, v1 in enumerate(x1):
+        for i, v1 in enumerate(x1):
+            for j, v0 in enumerate(x0):
                 predicted = self.x*v1 + v0
-                cost = np.sum((predicted - self.expected_y)**2)
-                costs[i][j] = round(0.5*cost/len(predicted), 1)
+                sse = np.sum((predicted - self.expected_y)**2)
+                costs[i][j] = round(0.5*sse/len(predicted), 4)
+        # round in 5
+        # levels = np.unique(np.sort(np.round(costs/5, 0)*5))
+        # round in 10
+        levels = np.unique(np.sort(np.round(costs, -1)))
 
         # color map
         cm = plt.cm.get_cmap('Wistia')
@@ -141,7 +145,9 @@ class Visualization:
                 sse = np.sum((predicted - self.expected_y)**2)
                 costs[i][j] = round(0.5*sse/len(predicted), 4)
         # round in 5
-        levels = np.unique(np.sort(np.round(costs/5, 0)*5))
+        # levels = np.unique(np.sort(np.round(costs/5, 0)*5))
+        # round in 10
+        levels = np.unique(np.sort(np.round(costs, -1)))
 
 
         # color map
@@ -182,6 +188,6 @@ if __name__ == "__main__":
     # vlr.animation_expected_predicted()
     # vlr.expected_predicted()
     # vlr.cost_iteration()
-    # # vlr.pcolor_cost()
+    vlr.pcolor_cost()
     vlr.contour_cost()
     plt.show()
