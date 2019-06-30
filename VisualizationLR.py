@@ -55,7 +55,7 @@ class Visualization:
             plt.grid(True, alpha=0.5)
             plt.draw()
             plt.pause(delay)
-        plt.plot(np.arange(0, max_iteration+1, 1), self.costs, 'b-')
+        plt.plot(np.arange(0, self.lr.max_iteration+1, 1), self.costs, 'b-')
         plt.ioff()
         plt.show()
 
@@ -81,7 +81,7 @@ class Visualization:
 
     def cost_iteration(self):
         fig = plt.figure("Cost-Iteration plot", figsize=(10, 5))
-        iterations = np.arange(0, max_iteration+1, 1)
+        iterations = np.arange(0, self.lr.max_iteration+1, 1)
         plt.plot(iterations, self.costs, 'b.')
         plt.plot(iterations, self.costs, 'b-')
         plt.title("Alpha: {}".format(self.alpha))
@@ -161,7 +161,7 @@ class Visualization:
 
 if __name__ == "__main__":
     num_sample = 50
-    max_iteration = 100
+    max_iteration = 200
     learning_rate = 0.0001
 
     # expected y = mx + c
@@ -179,9 +179,9 @@ if __name__ == "__main__":
     print("Cost: {}".format(lr.costs[-1]))
     print("Initial cost:", lr.costs[0])
     vlr = Visualization(lr)
-    # vlr.animation_expected_predicted(delay=0.2)
+    vlr.animation_expected_predicted()
     vlr.expected_predicted()
     vlr.cost_iteration()
-    # vlr.pcolor_cost()
-    # vlr.contour_cost()
+    vlr.pcolor_cost()
+    vlr.contour_cost()
     plt.show()
