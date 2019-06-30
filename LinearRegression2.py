@@ -78,6 +78,6 @@ if __name__ == "__main__":
     print("Expected y = {}x + {} + (random noise)".format(m, c))
     initial_params = np.ones(X.shape[1])
     # Linear Regression
-    lr = LinearRegression2(X, Y,initial_params=initial_params ,learning_rate=learning_rate, max_iteration=max_iteration)
+    lr = LinearRegression2(X, Y, initial_params=initial_params, learning_rate=learning_rate, max_iteration=max_iteration)
     print("Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
     print("Cost: {}".format(lr.costs[-1]))
