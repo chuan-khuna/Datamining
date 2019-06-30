@@ -1,6 +1,24 @@
 import numpy as np
 
 class LeastSquare:
+    """
+        Least Square:
+            h = w0x0 + w1x1 + ....
+            parameters = inverse((X.T) * X) * (X.T * y)   ; x*y = x dot y
+            parameters = [w0 w1 w2 ...]
+
+        X = [
+            [x0 x1 ...]
+            [x0 x1 ...]
+            ...
+        ]
+        
+        y = [
+            y0
+            y1
+            ...
+        ]
+    """
     def __init__(self, x, y):
         self.x = x
         self.expected_y = y
@@ -8,22 +26,6 @@ class LeastSquare:
         self.least_square()
 
     def least_square(self):
-        """
-            Least Square:
-                h = w0x0 + w1x1 + ....
-            parameters = inverse((X.T) * X) * (X.T * y)   ; x*y = x dot y
-            X = [
-                [x0 x1 ...]
-                [x0 x1 ...]
-                ...
-            ]
-            y = [
-                y0
-                y1
-                ...
-            ]
-            parameters = [w0 w1 w2 ...]
-        """
         x_t = self.x.transpose()
         self.parameters = np.linalg.inv(
             x_t.dot(self.x)
