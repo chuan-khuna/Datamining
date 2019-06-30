@@ -217,6 +217,6 @@ if __name__ == "__main__":
     # vlr.animation_expected_predicted()
     # vlr.expected_predicted()
     # vlr.cost_iteration()
-    vlr.animation_contour_cost()
+    # vlr.animation_contour_cost()
     vlr.contour_cost()
     plt.show()
