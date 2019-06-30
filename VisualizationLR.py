@@ -95,6 +95,36 @@ class Visualization:
         plt.ioff()
         plt.show()
         
+    def animation_contour_cost(self, delay=0.001, grid_res=100, level_round=10):
+        fig = plt.figure("Contour-Cost animation plot", figsize=(10, 5))
+        plt.ion()
+        w0, w1, x0, x1, costs = self.generate_contour_grid(grid_res=grid_res)
+        levels = self.contour_grid_level_round(costs, option=level_round)
+
+        # color map
+        cm = plt.cm.get_cmap('Wistia')
+
+        for i, c in enumerate(self.costs):
+            plt.clf()
+            contour = plt.contour(x0, x1, costs, levels,colors='black', linestyles='dashed', alpha=0.5)
+            plt.clabel(contour, inline=1, fontsize=8)
+            contour_bg = plt.contourf(x0, x1, costs, levels, cmap=cm)
+            
+            plt.plot(w0[:i], w1[:i], 'b.')
+            plt.title("Alpha: {}, Iteration: {}, Cost: {}".format(
+                    self.alpha, i, self.costs[i]
+                ))
+            plt.xlabel("w0")
+            plt.ylabel("w1")
+            plt.draw()
+            plt.pause(delay)
+        plt.plot(w0, w1, 'b')
+        plt.plot(w0, w1, 'b.', label="Alpha: {}".format(self.alpha))
+        plt.title("Alpha: {}, Iteration: {}, Cost: {}".format(self.alpha, len(self.costs)-1, self.costs[-1]))
+        plt.ioff()
+        plt.show()
+
+    
     def expected_predicted(self):
         fig = plt.figure('Linear Regression', figsize=(10, 5))
         expected = plt.plot(self.x, self.expected_y, 'r.', label='expected')
@@ -187,6 +217,6 @@ if __name__ == "__main__":
     # vlr.animation_expected_predicted()
     # vlr.expected_predicted()
     # vlr.cost_iteration()
-    vlr.pcolor_cost()
+    vlr.animation_contour_cost()
     vlr.contour_cost()
     plt.show()
