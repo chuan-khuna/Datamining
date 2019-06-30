@@ -138,10 +138,10 @@ class Visualization:
         for i, v0 in enumerate(x0):
             for j, v1 in enumerate(x1):
                 predicted = self.x*v1 + v0
-                cost = np.sum((predicted - self.expected_y)**2)
-                costs[i][j] = round(0.5*cost/len(predicted), 4)
-        # round in 10
-        levels = np.unique(np.sort(np.round(costs, -1)))
+                sse = np.sum((predicted - self.expected_y)**2)
+                costs[i][j] = round(0.5*sse/len(predicted), 4)
+        # round in 5
+        levels = np.unique(np.sort(np.round(costs/5, 0)*5))
 
 
         # color map
@@ -180,8 +180,8 @@ if __name__ == "__main__":
     print("Initial cost:", lr.costs[0])
     vlr = Visualization(lr)
     # vlr.animation_expected_predicted()
-    vlr.expected_predicted()
-    vlr.cost_iteration()
+    # vlr.expected_predicted()
+    # vlr.cost_iteration()
     # vlr.pcolor_cost()
-    # vlr.contour_cost()
+    vlr.contour_cost()
     plt.show()
