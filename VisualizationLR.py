@@ -135,8 +135,8 @@ class Visualization:
         x1 = np.linspace(w1_min-self.extend_axis, w1_max+self.extend_axis, grid_res)
         costs = np.zeros(shape=(x0.size, x1.size))
         # calculate cost of grid
-        for i, v0 in enumerate(x0):
-            for j, v1 in enumerate(x1):
+        for i, v1 in enumerate(x1):
+            for j, v0 in enumerate(x0):
                 predicted = self.x*v1 + v0
                 sse = np.sum((predicted - self.expected_y)**2)
                 costs[i][j] = round(0.5*sse/len(predicted), 4)
@@ -160,8 +160,8 @@ class Visualization:
 
 
 if __name__ == "__main__":
-    num_sample = 50
-    max_iteration = 200
+    num_sample = 100
+    max_iteration = 100
     learning_rate = 0.0001
 
     # expected y = mx + c
@@ -179,9 +179,9 @@ if __name__ == "__main__":
     print("Cost: {}".format(lr.costs[-1]))
     print("Initial cost:", lr.costs[0])
     vlr = Visualization(lr)
-    vlr.animation_expected_predicted()
-    vlr.expected_predicted()
-    vlr.cost_iteration()
-    vlr.pcolor_cost()
+    # vlr.animation_expected_predicted()
+    # vlr.expected_predicted()
+    # vlr.cost_iteration()
+    # # vlr.pcolor_cost()
     vlr.contour_cost()
     plt.show()
