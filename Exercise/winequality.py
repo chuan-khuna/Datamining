@@ -6,3 +6,4 @@ from LinearRegression2 import LinearRegression2 as LR
 from LeastSquare import LeastSquare as LS
 
 red_wine = pd.read_csv("winequality-red.csv", sep=';')
+x = red_wine.iloc[: , 0: -1]
