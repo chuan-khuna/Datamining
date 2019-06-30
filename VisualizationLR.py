@@ -13,6 +13,7 @@ class Visualization:
         self.costs = np.array(self.lr.costs)
         self.parameters = np.array(self.lr.parameters)
         self.alpha = self.lr.learning_rate
+        self.extend_axis = 1
 
     def animation_expected_predicted(self, delay=0.001):
         fig = plt.figure('Linear Regression Animation', figsize=(10, 5))
@@ -23,12 +24,11 @@ class Visualization:
             expected = plt.plot(self.x, self.expected_y, 'r.', label='expected')
             w0 = p[0]
             w1 = p[1]
-            extend = 1
-            x = np.linspace(np.amin(self.x) - extend, np.amax(self.x) + extend, 100)
+            x = np.linspace(np.amin(self.x) - self.extend_axis, np.amax(self.x) + self.extend_axis, 100)
             y = w1*x + w0
             predicted = plt.plot(x, y, 'b-', label='predicted: h = {}x + {}'.format(p[1], p[0]))
-            plt.axis([np.amin(self.x) - extend, np.amax(self.x) + extend, 
-                np.amin(self.expected_y) - extend, np.amax(self.expected_y) + extend
+            plt.axis([np.amin(self.x) - self.extend_axis, np.amax(self.x) + self.extend_axis, 
+                np.amin(self.expected_y) - self.extend_axis, np.amax(self.expected_y) + self.extend_axis
             ])
             plt.title("Alpha: {}, Iteration: {}, Cost: {}".format(
                 self.alpha, i, self.costs[i]
@@ -55,7 +55,7 @@ class Visualization:
             plt.grid(True, alpha=0.5)
             plt.draw()
             plt.pause(delay)
-        plt.plot(np.arange(0, max_iteration+1, 1), self.costs, 'b-')
+        plt.plot(np.arange(0, self.lr.max_iteration+1, 1), self.costs, 'b-')
         plt.ioff()
         plt.show()
 
@@ -64,16 +64,15 @@ class Visualization:
         expected = plt.plot(self.x, self.expected_y, 'r.', label='expected')
         w0 = self.parameters[-1][0]
         w1 = self.parameters[-1][1]
-        extend = 1
-        x = np.linspace(np.amin(self.x) - extend, np.amax(self.x) + extend, 100)
+        x = np.linspace(np.amin(self.x) - self.extend_axis, np.amax(self.x) + self.extend_axis, 100)
         y = w1*x + w0
         predicted = plt.plot(x, y, 'b-', label='predicted: h = {}x + {}'.format(w1, w0))
 
-        plt.title("Alpha: {}, Cost: {}, Iteration: {}".format(
-            self.alpha, self.costs[-1], len(self.parameters)-1
+        plt.title("Alpha: {}, Iteration: {}, Cost: {}".format(
+            self.alpha, len(self.parameters)-1, self.costs[-1]
         ))
-        plt.axis([np.amin(self.x) - extend, np.amax(self.x) + extend, 
-            np.amin(self.expected_y) - extend, np.amax(self.expected_y) + extend
+        plt.axis([np.amin(self.x) - self.extend_axis, np.amax(self.x) + self.extend_axis, 
+            np.amin(self.expected_y) - self.extend_axis, np.amax(self.expected_y) + self.extend_axis
         ])
         plt.legend()
         plt.xlabel("x")
@@ -82,7 +81,7 @@ class Visualization:
 
     def cost_iteration(self):
         fig = plt.figure("Cost-Iteration plot", figsize=(10, 5))
-        iterations = np.arange(0, max_iteration+1, 1)
+        iterations = np.arange(0, self.lr.max_iteration+1, 1)
         plt.plot(iterations, self.costs, 'b.')
         plt.plot(iterations, self.costs, 'b-')
         plt.title("Alpha: {}".format(self.alpha))
@@ -99,17 +98,20 @@ class Visualization:
         w0_min,w0_max = np.amin(w0), np.amax(w0)
         w1_min,w1_max = np.amin(w1), np.amax(w1)
 
-        extend = 2
         # contour plot coordinate
-        x0 = np.linspace(w0_min-extend, w0_max+extend, grid_res)
-        x1 = np.linspace(w1_min-extend, w1_max+extend, grid_res)
+        x0 = np.linspace(w0_min-self.extend_axis, w0_max+self.extend_axis, grid_res)
+        x1 = np.linspace(w1_min-self.extend_axis, w1_max+self.extend_axis, grid_res)
         costs = np.zeros(shape=(x0.size, x1.size))
         # calculate cost of grid
-        for i, v0 in enumerate(x0):
-            for j, v1 in enumerate(x1):
+        for i, v1 in enumerate(x1):
+            for j, v0 in enumerate(x0):
                 predicted = self.x*v1 + v0
-                cost = np.sum((predicted - self.expected_y)**2)
-                costs[i][j] = round(0.5*cost/len(predicted), 1)
+                sse = np.sum((predicted - self.expected_y)**2)
+                costs[i][j] = round(0.5*sse/len(predicted), 4)
+        # round in 5
+        # levels = np.unique(np.sort(np.round(costs/5, 0)*5))
+        # round in 10
+        levels = np.unique(np.sort(np.round(costs, -1)))
 
         # color map
         cm = plt.cm.get_cmap('Wistia')
@@ -132,17 +134,18 @@ class Visualization:
         w0_min,w0_max = np.amin(w0), np.amax(w0)
         w1_min,w1_max = np.amin(w1), np.amax(w1)
 
-        extend = 2
         # contour plot coordinate
-        x0 = np.linspace(w0_min-extend, w0_max+extend, grid_res)
-        x1 = np.linspace(w1_min-extend, w1_max+extend, grid_res)
+        x0 = np.linspace(w0_min-self.extend_axis, w0_max+self.extend_axis, grid_res)
+        x1 = np.linspace(w1_min-self.extend_axis, w1_max+self.extend_axis, grid_res)
         costs = np.zeros(shape=(x0.size, x1.size))
         # calculate cost of grid
-        for i, v0 in enumerate(x0):
-            for j, v1 in enumerate(x1):
+        for i, v1 in enumerate(x1):
+            for j, v0 in enumerate(x0):
                 predicted = self.x*v1 + v0
-                cost = np.sum((predicted - self.expected_y)**2)
-                costs[i][j] = round(0.5*cost/len(predicted), 4)
+                sse = np.sum((predicted - self.expected_y)**2)
+                costs[i][j] = round(0.5*sse/len(predicted), 4)
+        # round in 5
+        # levels = np.unique(np.sort(np.round(costs/5, 0)*5))
         # round in 10
         levels = np.unique(np.sort(np.round(costs, -1)))
 
@@ -181,10 +184,10 @@ if __name__ == "__main__":
     print("Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
     print("Cost: {}".format(lr.costs[-1]))
     print("Initial cost:", lr.costs[0])
-
     vlr = Visualization(lr)
-    vlr.expected_predicted()
-    vlr.cost_iteration()
-    # vlr.pcolor_cost()
-    # vlr.contour_cost()
+    # vlr.animation_expected_predicted()
+    # vlr.expected_predicted()
+    # vlr.cost_iteration()
+    vlr.pcolor_cost()
+    vlr.contour_cost()
     plt.show()
