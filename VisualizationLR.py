@@ -68,8 +68,8 @@ class Visualization:
         y = w1*x + w0
         predicted = plt.plot(x, y, 'b-', label='predicted: h = {}x + {}'.format(w1, w0))
 
-        plt.title("Alpha: {}, Cost: {}, Iteration: {}".format(
-            self.alpha, self.costs[-1], len(self.parameters)-1
+        plt.title("Alpha: {}, Iteration: {}, Cost: {}".format(
+            self.alpha, len(self.parameters)-1, self.costs[-1]
         ))
         plt.axis([np.amin(self.x) - self.extend_axis, np.amax(self.x) + self.extend_axis, 
             np.amin(self.expected_y) - self.extend_axis, np.amax(self.expected_y) + self.extend_axis
@@ -160,7 +160,7 @@ class Visualization:
 
 
 if __name__ == "__main__":
-    num_sample = 100
+    num_sample = 50
     max_iteration = 100
     learning_rate = 0.0001
 
@@ -179,9 +179,9 @@ if __name__ == "__main__":
     print("Cost: {}".format(lr.costs[-1]))
     print("Initial cost:", lr.costs[0])
     vlr = Visualization(lr)
-    # vlr.animation_expected_predicted()
-    # vlr.expected_predicted()
-    # vlr.cost_iteration()
+    # vlr.animation_expected_predicted(delay=0.2)
+    vlr.expected_predicted()
+    vlr.cost_iteration()
     # vlr.pcolor_cost()
-    vlr.contour_cost()
+    # vlr.contour_cost()
     plt.show()
