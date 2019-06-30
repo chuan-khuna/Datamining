@@ -15,6 +15,42 @@ class Visualization:
         self.alpha = self.lr.learning_rate
         self.extend_axis = extend_axis
 
+    def contour_grid_level_round(self, costs, option=10):
+        if option == 10:
+            # round in 10
+            levels = np.unique(np.sort(np.round(costs, -1)))
+        elif option == 5:
+            # round in 5
+            levels = np.unique(np.sort(np.round(costs/5, 0)*5))
+        elif option == 1:
+            # round int
+            levels = np.unique(np.sort(np.round(costs)))
+        elif option == 0.25:
+            levels = np.unique(np.sort(np.round(costs/25, 2)*25))
+        else:
+            levels = np.unique(np.sort(np.round(costs, 1)))
+        return levels
+
+    def generate_contour_grid(self, grid_res=100):
+        # model weight
+        w0 = self.parameters[:, 0]
+        w1 = self.parameters[:, 1]
+        w0_min,w0_max = np.amin(w0), np.amax(w0)
+        w1_min,w1_max = np.amin(w1), np.amax(w1)
+
+        # contour plot coordinate
+        x0 = np.linspace(w0_min-self.extend_axis, w0_max+self.extend_axis, grid_res)
+        x1 = np.linspace(w1_min-self.extend_axis, w1_max+self.extend_axis, grid_res)
+        costs = np.zeros(shape=(x0.size, x1.size))
+        # calculate cost of grid
+        for i, v1 in enumerate(x1):
+            for j, v0 in enumerate(x0):
+                predicted = self.x*v1 + v0
+                sse = np.sum((predicted - self.expected_y)**2)
+                costs[i][j] = round(0.5*sse/len(predicted), 4)
+
+        return w0, w1, x0, x1, costs
+
     def animation_expected_predicted(self, delay=0.001):
         fig = plt.figure('Linear Regression Animation', figsize=(10, 5))
         plt.ion()
@@ -58,7 +94,7 @@ class Visualization:
         plt.plot(np.arange(0, self.lr.max_iteration+1, 1), self.costs, 'b-')
         plt.ioff()
         plt.show()
-
+        
     def expected_predicted(self):
         fig = plt.figure('Linear Regression', figsize=(10, 5))
         expected = plt.plot(self.x, self.expected_y, 'r.', label='expected')
@@ -92,36 +128,8 @@ class Visualization:
     def pcolor_cost(self, grid_res=100, level_round=10):
         fig = plt.figure('Cost pcolor plot', figsize=(10, 5))
 
-        # model weight
-        w0 = self.parameters[:, 0]
-        w1 = self.parameters[:, 1]
-        w0_min,w0_max = np.amin(w0), np.amax(w0)
-        w1_min,w1_max = np.amin(w1), np.amax(w1)
-
-        # contour plot coordinate
-        x0 = np.linspace(w0_min-self.extend_axis, w0_max+self.extend_axis, grid_res)
-        x1 = np.linspace(w1_min-self.extend_axis, w1_max+self.extend_axis, grid_res)
-        costs = np.zeros(shape=(x0.size, x1.size))
-        # calculate cost of grid
-        for i, v1 in enumerate(x1):
-            for j, v0 in enumerate(x0):
-                predicted = self.x*v1 + v0
-                sse = np.sum((predicted - self.expected_y)**2)
-                costs[i][j] = round(0.5*sse/len(predicted), 4)
-
-        if level_round == 10:
-            # round in 10
-            levels = np.unique(np.sort(np.round(costs, -1)))
-        elif level_round == 5:
-            # round in 5
-            levels = np.unique(np.sort(np.round(costs/5, 0)*5))
-        elif level_round == 1:
-            # round int
-            levels = np.unique(np.sort(np.round(costs)))
-        elif level_round == 0.25:
-            levels = np.unique(np.sort(np.round(costs/25, 2)*25))
-        else:
-            levels = np.unique(np.sort(np.round(costs, 1)))
+        w0, w1, x0, x1, costs = self.generate_contour_grid(grid_res=grid_res)
+        levels = self.contour_grid_level_round(costs, option=level_round)
 
         # color map
         cm = plt.cm.get_cmap('Wistia')
@@ -138,37 +146,8 @@ class Visualization:
     def contour_cost(self, grid_res=100, level_round=10):
         fig = plt.figure('Cost contour plot', figsize=(10, 5))
 
-        # model weight
-        w0 = self.parameters[:, 0]
-        w1 = self.parameters[:, 1]
-        w0_min,w0_max = np.amin(w0), np.amax(w0)
-        w1_min,w1_max = np.amin(w1), np.amax(w1)
-
-        # contour plot coordinate
-        x0 = np.linspace(w0_min-self.extend_axis, w0_max+self.extend_axis, grid_res)
-        x1 = np.linspace(w1_min-self.extend_axis, w1_max+self.extend_axis, grid_res)
-        costs = np.zeros(shape=(x0.size, x1.size))
-        # calculate cost of grid
-        for i, v1 in enumerate(x1):
-            for j, v0 in enumerate(x0):
-                predicted = self.x*v1 + v0
-                sse = np.sum((predicted - self.expected_y)**2)
-                costs[i][j] = round(0.5*sse/len(predicted), 4)
-
-        if level_round == 10:
-            # round in 10
-            levels = np.unique(np.sort(np.round(costs, -1)))
-        elif level_round == 5:
-            # round in 5
-            levels = np.unique(np.sort(np.round(costs/5, 0)*5))
-        elif level_round == 1:
-            # round int
-            levels = np.unique(np.sort(np.round(costs)))
-        elif level_round == 0.25:
-            levels = np.unique(np.sort(np.round(costs/25, 2)*25))
-        else:
-            levels = np.unique(np.sort(np.round(costs, 1)))
-
+        w0, w1, x0, x1, costs = self.generate_contour_grid(grid_res=grid_res)
+        levels = self.contour_grid_level_round(costs, option=level_round)
 
         # color map
         cm = plt.cm.get_cmap('Wistia')
