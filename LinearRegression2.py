@@ -1,7 +1,7 @@
 import numpy as np
 
 class LinearRegression2:
-    def __init__(self, x, expected_y, learning_rate=0.00001, max_iteration=500, initial_params=None):
+    def __init__(self, x, expected_y, initial_params, learning_rate=0.00001, max_iteration=500):
         """
             xi = [x0 x1 ... xn]         ; n = number of attribute of x[i]
             x = [x1 x2 ..... xm]        ; m = number of sample
@@ -13,8 +13,6 @@ class LinearRegression2:
         self.max_iteration = max_iteration
         self.predicted_y = []
         self.costs = []
-        if initial_params == None:
-            initial_params = np.ones(self.x.shape[1])
         self.parameters = [initial_params]
         self.linear_regression()
 
@@ -78,8 +76,8 @@ if __name__ == "__main__":
     # or y = m*X[:, 1] + X[:, 0]*c + np.random.randn(num_sample)
 
     print("Expected y = {}x + {} + (random noise)".format(m, c))
-
+    initial_params = np.ones(X.shape[1])
     # Linear Regression
-    lr = LinearRegression(X, Y, learning_rate=learning_rate, max_iteration=max_iteration)
+    lr = LinearRegression2(X, Y,initial_params=initial_params ,learning_rate=learning_rate, max_iteration=max_iteration)
     print("Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
     print("Cost: {}".format(lr.costs[-1]))
