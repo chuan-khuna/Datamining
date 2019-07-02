@@ -192,6 +192,9 @@ class Visualization:
         plt.xlabel('w0')
         plt.ylabel('w1')
         plt.legend()
+    
+    def show(self):
+        plt.show()
 
 
 if __name__ == "__main__":
@@ -219,4 +222,4 @@ if __name__ == "__main__":
     # vlr.cost_iteration()
     # vlr.animation_contour_cost()
     vlr.contour_cost()
-    plt.show()
+    vlr.show()
