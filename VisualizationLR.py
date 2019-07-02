@@ -15,20 +15,14 @@ class Visualization:
         self.alpha = self.lr.learning_rate
         self.extend_axis = extend_axis
 
-    def contour_grid_level_round(self, costs, option=10):
-        if option == 10:
-            # round in 10
-            levels = np.unique(np.sort(np.round(costs, -1)))
-        elif option == 5:
+    def contour_grid_level_round(self, costs, option=5):
+        if option == 5:
             # round in 5
             levels = np.unique(np.sort(np.round(costs/5, 0)*5))
-        elif option == 1:
-            # round int
-            levels = np.unique(np.sort(np.round(costs)))
         elif option == 0.25:
             levels = np.unique(np.sort(np.round(costs/25, 2)*25))
         else:
-            levels = np.unique(np.sort(np.round(costs, 1)))
+            levels = np.unique(np.sort(np.round(costs, option)))
         return levels
 
     def generate_contour_grid(self, grid_res=100):
@@ -155,7 +149,7 @@ class Visualization:
         plt.ylabel("Cost")
         plt.grid(True, alpha=0.5)
 
-    def pcolor_cost(self, grid_res=100, level_round=10):
+    def pcolor_cost(self, grid_res=100, level_round=5):
         fig = plt.figure('Cost pcolor plot', figsize=(10, 5))
 
         w0, w1, x0, x1, costs = self.generate_contour_grid(grid_res=grid_res)
@@ -173,7 +167,7 @@ class Visualization:
         plt.ylabel('w1')
         plt.legend()
 
-    def contour_cost(self, grid_res=100, level_round=10):
+    def contour_cost(self, grid_res=100, level_round=5):
         fig = plt.figure('Cost contour plot', figsize=(10, 5))
 
         w0, w1, x0, x1, costs = self.generate_contour_grid(grid_res=grid_res)
