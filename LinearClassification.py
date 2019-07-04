@@ -36,10 +36,13 @@ class LinearClassification:
         new_weights = old_weights - (self.learning_rate/len(self.expected_y))*(
                 (self.predicted_y - self.expected_y).dot(self.x)
             )
-        self.parameters.append(np.around(new_weights[0], 4))
+        print("old-weight:", old_weights)
+        print("new-weight:", new_weights)
+        self.parameters.append(np.around(new_weights, 4))
     
     def linear_classification(self):
         for i in range(1, self.max_iteration+1):
+            print("iteration", i)
             self.cal_predicted_class()      # calculate model class using logistic function
             self.cost_function()            # calculate cost of current iteration parameters
             self.gradient_descent()        # adjust parameter
@@ -56,7 +59,7 @@ if __name__ == "__main__":
         [1, 1, 1],
     ])
     and_init_w = np.array([0.5, 1.5, 1.5])
-    and_out = np.array([[0, 0, 0, 1]])
+    and_out = np.array([0, 0, 0, 1])
     learning_rate = 0.5
     max_iteration = 10
     lc = LinearClassification(and_in, and_out, initial_params=and_init_w, learning_rate=learning_rate, max_iteration=max_iteration)
