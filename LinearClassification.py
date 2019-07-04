@@ -40,7 +40,6 @@ class LinearClassification:
     
     def linear_classification(self):
         for i in range(1, self.max_iteration+1):
-            print("iteration", i)
             self.cal_predicted_class()      # calculate model class using logistic function
             self.cost_function()            # calculate cost of current iteration parameters
             self.gradient_descent()        # adjust parameter
