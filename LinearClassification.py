@@ -23,7 +23,7 @@ class LinearClassification:
         """
         logistic = lambda x: 1/(1+np.exp(-x))
         weights = self.parameters[-1]
-        v = (self.x).dot(weights.T)
+        v = (self.x).dot(weights.T).astype(np.double)
         self.predicted_y = logistic(v)
 
     def cost_function(self):
@@ -36,9 +36,7 @@ class LinearClassification:
         new_weights = old_weights - (self.learning_rate/len(self.expected_y))*(
                 (self.predicted_y - self.expected_y).dot(self.x)
             )
-        print("old-weight:", old_weights)
-        print("new-weight:", new_weights)
-        self.parameters.append(np.around(new_weights, 4))
+        self.parameters.append(np.around(new_weights.astype(np.double), 4))
     
     def linear_classification(self):
         for i in range(1, self.max_iteration+1):
