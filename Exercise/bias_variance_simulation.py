@@ -6,7 +6,7 @@ sin_sample = 1000
 x = np.linspace(0, 2*np.pi, sin_sample)
 y = np.sin(x)
 
-sample = 10
+sample = 100
 rand_const = np.random.uniform(-1, 1, sample)
 
 print("------ constant model ------")
