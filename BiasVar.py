@@ -1,9 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-import numpy as np
-import matplotlib.pyplot as plt
-import random
 
 class BiasVar:
     def __init__(self, model_weights, x, fx):
