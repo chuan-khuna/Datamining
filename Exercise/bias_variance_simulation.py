@@ -2,76 +2,75 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-sin_sample = 1000
-x = np.linspace(0, 2*np.pi, sin_sample)
-y = np.sin(x)
+def bias(g_bar, fx):
+    """
+        bias:
+            Ex[g_bar - fx]
 
-sample = 100
-rand_const = np.random.uniform(-1, 1, sample)
+        g_bar = mean of gD(x)       ; gD = model g from sample D
+        fx = actual output
+    """
+    bias = np.mean((g_bar - fx)**2)
+    return bias
 
-print("------ constant model ------")
-print("random {} samples constant".format(sample))
+def variance(g_d, g_bar):
+    """
+        variance = sum( (g_d - g_bar)**2 )/d_sample
+    """
+    variance = np.mean(
+        (g_d - g_bar)**2
+    )
+    return variance
 
-for c in rand_const:
-    plt.plot(x, [c]*len(x), alpha=0.2)
+if __name__ == "__main__":
 
-# g bar
-const_g_bar = round(np.mean(rand_const), 5)
-print("random constant mean: {}".format(const_g_bar))
+    sin_sample = 10000
+    x = np.linspace(0, 2*np.pi, sin_sample)
+    fx = np.sin(x)
 
-# bias = g bar - fx
-const_bias = np.array([const_g_bar] * len(y)) - y
-const_bias = np.sum(const_bias)
-print("const bias = {}".format(const_bias))
+    # number of gd model
+    num_model = 1000
+    print("random {} samples of model".format(num_model))
 
-# variance
-cosnt_variance = np.mean(
-    (rand_const - const_g_bar)**2
-)
-print("const variance = {}".format(cosnt_variance))
+    const_gd = np.random.uniform(-1, 1, num_model)
+    const_gbar = np.mean(const_gd)
+    const_bias = bias(np.repeat(const_gbar, sin_sample), fx)
+    const_variance = variance(const_gd, np.repeat(const_gbar, repeats=num_model))
+    print("------ constant model ------")
+    print("constant gbar: {:.4f}".format(const_gbar))
+    print("constant bias^2: {:.4f}".format(const_bias))
+    print("constant variance: {:.4f}".format(const_variance))
+    print("constant bias^2+variance: {:.4f}".format(const_bias+const_variance))
 
-print("------ linear model ------")
-
-
-# first and second point index
-fi = random.sample(range(sin_sample), sample)
-si = random.sample(range(sin_sample), sample)
-
-models_w = []
-for i in range(len(fi)):
-    x1 = x[fi[i]]
-    y1 = y[fi[i]]
-    while fi[i] == si[i]:
-        # random agian if same index
-        si[i] = random.randint(0, len(fi)-1)
-    x2 = x[si[i]]
-    y2 = y[si[i]]
-    
-    m = (y1 - y2)/(x1 - x2)
-    c = y1 - m*x1
-    model_w = [c, m]
-    models_w.append(model_w)
-
-models_w = np.array(models_w)
-for i in range(len(models_w)):
-    plt.plot(x, x*models_w[i][1]+models_w[i][0], alpha=0.2)
-    pass
-
-# g bar, y_bar = m_bar*x + c_bar
-m_bar = np.mean(models_w[:, 1])
-c_bar = np.mean(models_w[:, 1])
-print("random linear mean: {}x + {}".format(round(m_bar, 3), round(c_bar, 3)))
-# linear g bar
-l_g_bar = m_bar*x + c_bar
-# bias = g bar - fx
-l_bias = np.sum(l_g_bar - y)
-print("linear bias = {}".format(l_bias))
-
-
-plt.plot(x, [const_g_bar]*len(x), 'r-', label="mean of const random")
-plt.plot(x, m_bar*x + c_bar, 'g-', label="mean of linear random")
-plt.plot(x, y, 'b-')
-plt.axis([0, 2*np.pi, -1.25, 1.25])
-plt.grid(True, alpha=0.8)
-plt.legend()
-plt.show()
+    # first and second point index for linear model
+    fi = random.sample(range(sin_sample), num_model)
+    si = random.sample(range(sin_sample), num_model)
+    lin_gd = []
+    # create linear models, 
+    for i in range(num_model):
+        x1 = x[fi[i]]
+        y1 = fx[fi[i]]
+        while fi[i] == si[i]:
+            # random agian if same index
+            si[i] = random.randint(0, len(fi)-1)
+        x2 = x[si[i]]
+        y2 = fx[si[i]]
+        
+        m = (y1 - y2)/(x1 - x2)
+        c = y1 - m*x1
+        model_w = [c, m]
+        lin_gd.append(model_w)
+    lin_gd = np.round(np.array(lin_gd), 5)
+    lin_gbar = np.array([
+        np.mean(lin_gd[:, 0]), np.mean(lin_gd[:, 1])
+    ])
+    lin_bias = bias(lin_gbar[1]*x + lin_gbar[0], fx)
+    lin_variance = variance(
+        np.array([x*w1 + w0 for (w0, w1) in lin_gd]),
+        np.repeat(np.array([lin_gbar[0]+lin_gbar[1]*x]), repeats=num_model, axis=0)
+    )
+    print("------ linear model ------")
+    print("linear gbar: {}".format(lin_gbar))
+    print("linear bias^2: {:.4f}".format(lin_bias))
+    print("linear variance: {:.4f}".format(lin_variance))
+    print("linear bias^2+variance: {:.4f}".format(lin_bias+lin_variance))
