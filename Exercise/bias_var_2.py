@@ -18,7 +18,7 @@ def variance(g_d, g_bar):
         variance = sum( (g_d - g_bar)**2 )/d_sample
     """
     variance = np.mean(
-        (g_d - np.repeat(g_bar, repeats=len(g_d), axis=0))**2
+        (g_d - g_bar)**2
     )
     return variance
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     const_gd = np.random.uniform(-1, 1, num_model)
     const_gbar = np.mean(const_gd)
     const_bias = bias(np.repeat(const_gbar, sin_sample), fx)
-    const_variance = variance(const_gd, const_gbar)
+    const_variance = variance(const_gd, np.repeat(const_gbar, repeats=num_model))
     print("------ constant model ------")
     print("constant gbar: {:.4f}".format(const_gbar))
     print("constant bias^2: {:.4f}".format(const_bias))
@@ -65,7 +65,12 @@ if __name__ == "__main__":
         np.mean(lin_gd[:, 0]), np.mean(lin_gd[:, 1])
     ])
     lin_bias = bias(lin_gbar[1]*x + lin_gbar[0], fx)
-
+    lin_variance = variance(
+        np.array([x*w1 + w0 for (w0, w1) in lin_gd]),
+        np.repeat(np.array([lin_gbar[0]+lin_gbar[1]*x]), repeats=num_model, axis=0)
+    )
     print("------ linear model ------")
     print("linear gbar: {}".format(lin_gbar))
     print("linear bias^2: {:.4f}".format(lin_bias))
+    print("linear variance: {:.4f}".format(lin_variance))
+    print("linear bias^2+variance: {:.4f}".format(lin_bias+lin_variance))
