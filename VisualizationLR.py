@@ -167,18 +167,18 @@ class Visualization:
         plt.ylabel('w1')
         plt.legend()
 
-    def contour_cost(self, grid_res=100, level_round=5):
+    def contour_cost(self, grid_res=100, level_round=5, color_res=16):
         fig = plt.figure('Cost contour plot', figsize=(10, 5))
 
         w0, w1, x0, x1, costs = self.generate_contour_grid(grid_res=grid_res)
         levels = self.contour_grid_level_round(costs, option=level_round)
-
+        color_level = np.linspace(levels[0], levels[-1], color_res+1)
         # color map
         cm = plt.cm.get_cmap('Wistia')
 
-        contour = plt.contour(x0, x1, costs, levels,colors='black', linestyles='dashed', alpha=0.5)
+        contour = plt.contour(x0, x1, costs, color_level, colors='black', linestyles='dashed', alpha=0.5)
         plt.clabel(contour, inline=1, fontsize=8)
-        contour_bg = plt.contourf(x0, x1, costs, levels, cmap=cm)
+        contour_bg = plt.contourf(x0, x1, costs, color_level, cmap=cm)
 
         plt.plot(w0, w1, 'b')
         plt.plot(w0, w1, 'b.', label="Alpha: {}".format(self.alpha))
