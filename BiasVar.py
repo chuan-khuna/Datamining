@@ -54,14 +54,14 @@ class BiasVar:
 
 
 if __name__ == "__main__":
-    sin_sample = 200
-    x = np.linspace(0, 2*np.pi, sin_sample)
+    n = 200
+    x = np.linspace(0, 2*np.pi, n)
     fx = np.sin(x)
     x_aug = np.array([[1, i] for i in x])
     num_model = 20
     const_weights = np.random.uniform(-1, 1, num_model)
-    const_weights = np.array([[w, 0] for w in const_weights])
-    const_model = BiasVar(const_weights, x_aug, fx)
+    const_weights_aug = np.array([[w, 0] for w in const_weights])
+    const_model = BiasVar(const_weights_aug, x_aug, fx)
 
     print("------ constant model ------")
     print("constant gbar: {}".format(const_model.mean_weight))
@@ -70,11 +70,11 @@ if __name__ == "__main__":
     print("constant bias^2+variance: {}".format(const_model.bias+const_model.variance))
 
     # first and second point index for linear model
-    fi = random.sample(range(sin_sample), num_model)
-    si = random.sample(range(sin_sample), num_model)
+    fi = random.sample(range(n), num_model)
+    si = random.sample(range(n), num_model)
 
     lin_weights = []
-    # create linear models, 
+    # create linear models
     for i in range(num_model):
         x1 = x[fi[i]]
         y1 = fx[fi[i]]
