@@ -29,7 +29,16 @@ x_val = np.arange(np.amin(x1)-5, np.amax(x1)+5, 0.1)
 for i in range(len(boundaries)):
     w0, w1, w2 = boundaries[i][0], boundaries[i][1], boundaries[i][2]  
     y_val = -(w1*x_val + w0)/w2
-    sns.lineplot(x_val, y_val, label=f'b{i+1}, {w1:.2f}x1 + {w2:.2f}x2 + {w0:.2f} = 0')
+    sns.lineplot(x_val, y_val, label=f'b{i+1}, {w1:.2f}x1 + {w2:.2f}x2 + {w0:.2f} = 0', alpha=0.1)
+
+
+# Kesler consrtuction
+# w12 = boundaries[0] - boundaries[1]
+# w23 = boundaries[1] - boundaries[2]
+# w13 = boundaries[0] - boundaries[2]
+# sns.lineplot(np.arange(0, 6.4, 0.1), -(w12[1]*np.arange(0, 6.4, 0.1) + w12[0])/w12[2], label=f'k1-2')
+# sns.lineplot(np.arange(6.3, 15, 0.1), -(w23[1]*np.arange(6.3, 15, 0.1) + w23[0])/w23[2], label=f'k2-3')
+# sns.lineplot(np.arange(6.3, 8, 0.1), -(w13[1]*np.arange(6.3, 8, 0.1) + w13[0])/w13[2], label=f'k1-3')
 
 
 sns.scatterplot(x1[:50], x2[:50], label='c1')
