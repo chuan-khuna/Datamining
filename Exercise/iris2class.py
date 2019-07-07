@@ -38,7 +38,7 @@ params = lc.parameters[-1]
 w0, w1, w2 = params[0], params[1], params[2]
 axis_x = np.arange(0, 5, 0.1)
 axis_y = -(w1*axis_x + w0)/w2
-plt.plot(axis_x, axis_y, 'b-', label=f"boundary = {w1}x1 + {w2}x2 + {w0} = 0")
+plt.plot(axis_x, axis_y, 'b-', label=f"boundary = {w1}PL + {w2}PW + {w0} = 0")
 plt.plot(pl[:50], pw[:50], 'r.', label="Setosa")
 plt.plot(pl[50:], pw[50:], 'b.', label="Versicolor")
 plt.xlabel("Petal.Length")
