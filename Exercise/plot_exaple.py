@@ -17,11 +17,13 @@ def gaussian(x, y, wx, wy, c, base):
     v = wx*x + wy*y + c
     return np.exp(-((v**2)/base**2))
 
-wx = 1
-wy = -1
-c = 0
-base = 0.25
+wx = 0.4
+wy = 0.4
+c = -0.4
+base = 0.2
+
 Z = gaussian(X, Y, wx, wy, c, base)
+# Z = logistic(X, Y, 1, 1, -1.5)
 
 fig = plt.figure()
 ax = plt.axes(projection='3d')
