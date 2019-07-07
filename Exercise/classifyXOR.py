@@ -13,7 +13,7 @@ class XORClassify:
         self.linear_classification()
 
     def cal_predicted_class(self):
-        gaussian = lambda x: np.exp(-((x)**2)/0.2)
+        gaussian = lambda x: np.exp(-((x)**2))
         weights = self.parameters[-1]
         v = (self.x).dot(weights.T)
         self.predicted_y = gaussian(v)
