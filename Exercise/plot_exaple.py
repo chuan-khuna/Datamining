@@ -1,0 +1,42 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
+import numpy as np
+import pandas as pd
+
+
+grid_x = np.arange(-0.5, 1.5, 0.1)
+grid_y = np.arange(-0.5, 1.5, 0.1)
+X, Y = np.meshgrid(grid_x, grid_y)
+
+def logistic(x, y, wx, wy, c):
+    v = wx*x + wy*y + c
+    return 1/(1 + np.exp(-v))
+
+def gaussian(x, y, wx, wy, c, base):
+    v = wx*x + wy*y + c
+    return np.exp(-((v**2)/base**2))
+
+wx = 1
+wy = -1
+c = 0
+base = 0.25
+Z = gaussian(X, Y, wx, wy, c, base)
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+
+plt.plot(grid_x, grid_y)
+
+logistic_contour = ax.plot_surface(X, Y, Z, 
+                rstride=1, cstride=1,
+                cmap='viridis', edgecolor='none', alpha=0.75)
+
+
+plt.plot([0, 1], [1, 0], 'rx')
+plt.plot([0, 1], [0, 1], 'bx')
+
+
+plt.xlabel('x')
+plt.ylabel('y')
+plt.show()
