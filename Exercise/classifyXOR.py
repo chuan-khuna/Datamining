@@ -17,7 +17,7 @@ class XORClassify:
         self.linear_classification()
 
     def cal_predicted_class(self):
-        gaussian = lambda x: np.exp(-( (x**2) / (self.base**2) ))
+        gaussian = lambda x: np.exp( -(x**2)/(2*self.base**2) )
         weights = self.parameters[-1]
         v = (self.x).dot(weights.T)
         self.predicted_y = gaussian(v)
@@ -30,7 +30,7 @@ class XORClassify:
     def gradient_descent(self):
         old_weights = self.parameters[-1]
         new_weights = old_weights + (self.learning_rate/len(self.expected_y))*(
-                (self.predicted_y - self.expected_y).dot(self.x)
+                (self.x).T.dot(self.predicted_y - self.expected_y)
             )
         self.parameters.append(np.around(new_weights, 4))
     
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     xor_init_w = np.array([0.5, 1, 1])
     xor_out = np.array([0, 1, 1, 0])
     learning_rate = 0.1
-    max_iteration = 100
+    max_iteration = 200
     base = 0.1
     lc = XORClassify(xor_in, xor_out, 
         initial_params=xor_init_w, 
@@ -71,8 +71,8 @@ if __name__ == "__main__":
     wy = lc.parameters[-1][2]
     c = lc.parameters[-1][0]
 
-    grid_x = np.arange(-0.5, 1.5, 0.05)
-    grid_y = np.arange(-0.5, 1.5, 0.05)
+    grid_x = np.arange(-0.5, 1.5, 0.1)
+    grid_y = np.arange(-0.5, 1.5, 0.1)
     X, Y = np.meshgrid(grid_x, grid_y)
     Z = gaussian(X, Y, wx, wy, c, base)
 
@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     surface = ax.plot_surface(X, Y, Z, 
             rstride=1, cstride=1,
-            cmap='plasma', edgecolor='none', alpha=0.75)
+            cmap='plasma', edgecolor='none', alpha=1)
     
     plt.plot([0, 1], [1, 0], 'bo', markersize=10, label="class 1 True")
     plt.plot([0, 1], [0, 1], 'rX', markersize=10, label="class 0 False")
