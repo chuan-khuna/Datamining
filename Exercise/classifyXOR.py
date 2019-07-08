@@ -44,7 +44,7 @@ class XORClassify:
         self.cost_function()
 
 if __name__ == "__main__":
-    # and problem
+    # xor problem
     xor_in = np.array([
         [1, 0, 0],
         [1, 0, 1],
