@@ -13,7 +13,7 @@ mu2 = 1
 sigma1 = 1
 sigma2 = 1
 num_sample = 200
-boundary = b.boundary(mu1, mu2)
+boundary = b.single_threshold_boundary(mu1, mu2)
 x = np.linspace(-10, 10, num_sample)
 x_lim = [-5, 5]
 y1 = sp.stats.norm.pdf(x, mu1, sigma1)
@@ -28,6 +28,7 @@ sns.distplot(x1)
 sns.distplot(x2)
 mu1 = np.mean(x1)
 mu2 = np.mean(x2)
+boundary = b.single_threshold_boundary(mu1, mu2)
 sigma1 = np.sum((x1 - mu1)**2)/len(x1)
 sigma1 = np.sum((x2 - mu2)**2)/len(x2)
 print(f'mu1: {mu1:.2f}, sigma1: {sigma1:.2f}')
