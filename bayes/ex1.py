@@ -21,13 +21,12 @@ x = np.linspace(-10, 10, num_sample)
 y1 = sp.stats.norm.pdf(x, mu1, sigma1)
 y2 = sp.stats.norm.pdf(x, mu2, sigma2)
 
-
-fig = plt.figure(figsize=(9, 6))
+fig, ax = plt.subplots(figsize=(9, 6))
 sns.lineplot(x, y1, label='c1')
 sns.lineplot(x, y2, label='c2')
 plt.ylabel('likelihood')
-plt.axis([-6, 6, -0.02, 0.5])
+ax.set_xlim([-5, 5])
+ax.set_ylim([-0.02, 0.5])
 plt.legend()
-plt.savefig('ex1-likelihood.png', dpi=200, bbox_inches='tight')
 plt.show()
 
