@@ -14,6 +14,8 @@ def likelihood_plot(x, y1, y2):
     fig, ax = plt.subplots(figsize=(9, 6))
     sns.lineplot(x, y1, label='c1')
     sns.lineplot(x, y2, label='c2')
+    boundary = 0
+    plt.axvline(x=boundary, linewidth=2, color='black', alpha=0.75)
     plt.ylabel('likelihood')
     ax.set_xlim(x_lim)
     ax.set_ylim(y_lim)
@@ -26,8 +28,10 @@ def posterior_plot(x, y1, y2):
     fig, ax = plt.subplots(figsize=(9, 6))
     post1 = y1 / (y1+y2)
     post2 = 1 - post1
-    plt.plot(x, post1, label='c1')
-    plt.plot(x, post2, label='c2')
+    sns.lineplot(x, post1, label='c1')
+    sns.lineplot(x, post2, label='c2')
+    boundary = 0
+    plt.axvline(x=boundary, linewidth=2, color='black', alpha=0.75)
     plt.ylabel('posterior prob.')
     ax.set_xlim(x_lim)
     ax.set_ylim(y_lim)
