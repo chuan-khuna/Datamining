@@ -34,7 +34,7 @@ class LinearClassification:
     def gradient_descent(self):
         old_weights = self.parameters[-1]
         new_weights = old_weights - (self.learning_rate/len(self.expected_y))*(
-                (self.predicted_y - self.expected_y).dot(self.x)
+                (self.x).T.dot(self.predicted_y - self.expected_y)
             )
         self.parameters.append(np.around(new_weights.astype(np.double), 4))
     
