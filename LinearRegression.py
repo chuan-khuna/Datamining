@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class LinearRegression:
     def __init__(self, x, expected_y, learning_rate, max_iteration=500, initial_params=[0, 0]):
         self.x = x
@@ -19,15 +20,16 @@ class LinearRegression:
                 h = w1*x1  + w0*x0      ; x0 = 1, x1 = input x
                 y = mx + c
         """
-        self.predicted_y = (self.x * self.parameters[-1][1]) + self.parameters[-1][0]
-    
+        self.predicted_y = (
+            self.x * self.parameters[-1][1]) + self.parameters[-1][0]
+
     def cost_function(self):
         """
             Calculate error cost of current model
 
             cost = 1/2 * sum_square( predicted - expected )/m       ; m = number of sample
         """
-        
+
         sum_square = np.sum(
             (self.predicted_y-self.expected_y)**2
         )
@@ -41,20 +43,20 @@ class LinearRegression:
             new_weight = old_weight - learning_rate * ( sum(d * xi) )       ; d = predicted - expected
         """
         w0 = self.parameters[-1][0] - self.learning_rate * np.sum(
-                (self.predicted_y - self.expected_y) 
-            )
+            (self.predicted_y - self.expected_y)
+        )
         w1 = self.parameters[-1][1] - self.learning_rate * np.sum(
-                (self.predicted_y - self.expected_y)*self.x 
-            )
+            (self.predicted_y - self.expected_y)*self.x
+        )
         w0 = round(w0, 4)
         w1 = round(w1, 4)
         self.parameters.append([w0, w1])
-    
+
     def linear_regression(self):
         for i in range(1, self.max_iteration+1):
-                    self.cal_predicted_y()      # calculate predicted y of current parameter
-                    self.cost_function()        # calculate cost of current parameter
-                    self.gradient_descent()        # adjust parameter
+            self.cal_predicted_y()      # calculate predicted y of current parameter
+            self.cost_function()        # calculate cost of current parameter
+            self.gradient_descent()        # adjust parameter
         # calculate last iteration predicted y and cost
         self.cal_predicted_y()
         self.cost_function()
@@ -75,6 +77,8 @@ if __name__ == "__main__":
     print("Expected y = {}x + {} + (random noise)".format(m, c))
 
     # Linear Regression
-    lr = LinearRegression(x, y, learning_rate=learning_rate, max_iteration=max_iteration)
-    print("Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
+    lr = LinearRegression(x, y, learning_rate=learning_rate,
+                          max_iteration=max_iteration)
+    print(
+        "Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
     print("Cost: {}".format(lr.costs[-1]))

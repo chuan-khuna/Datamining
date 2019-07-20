@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class LeastSquare:
     """
         Least Square:
@@ -12,13 +13,14 @@ class LeastSquare:
             [x0 x1 ...]
             ...
         ]
-        
+
         y = [
             y0
             y1
             ...
         ]
     """
+
     def __init__(self, x, y):
         self.x = x
         self.expected_y = y
@@ -29,9 +31,10 @@ class LeastSquare:
         x_t = self.x.transpose()
         self.parameters = np.linalg.inv(
             x_t.dot(self.x)
-        ).dot( x_t.dot(self.expected_y) )
+        ).dot(x_t.dot(self.expected_y))
 
         self.parameters = np.around(self.parameters, 4)
+
 
 if __name__ == "__main__":
     # Example from NCC's book
@@ -58,4 +61,5 @@ if __name__ == "__main__":
     X = np.array([[1, i] for i in x])
     ls = LeastSquare(X, y)
     print("Expected: y = {}x + {} + (random)".format(m, c))
-    print("Least Square: h = {}x + {}".format(ls.parameters[1], ls.parameters[0]))
+    print(
+        "Least Square: h = {}x + {}".format(ls.parameters[1], ls.parameters[0]))
