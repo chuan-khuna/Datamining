@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import scipy as sp
+from sklearn.naive_bayes import GaussianNB
+
 sns.set_style("whitegrid")
 sns.set_palette("bright")
 sns.set_context('notebook', font_scale=1.25, rc={"lines.linewidth": 3})
