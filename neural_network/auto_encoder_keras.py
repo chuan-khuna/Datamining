@@ -49,7 +49,7 @@ def create_keras_autoencoder(hidden_act="sigmoid", output_act="sigmoid", lr=0.1)
 
 
 if __name__ == "__main__":
-    max_epochs = 20
+    max_epochs = 5000
     lr = 0.1
     epochs = np.arange(max_epochs)
 
