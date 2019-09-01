@@ -222,8 +222,7 @@ if __name__ == "__main__":
     # Linear Regression
     lr = LinearRegression(x, y, learning_rate=learning_rate,
                           max_iteration=max_iteration)
-    print(
-        "Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
+    print("Hypothesis y = {}x + {}".format(lr.parameters[-1][1], lr.parameters[-1][0]))
     print("Cost: {}".format(lr.costs[-1]))
     print("Initial cost:", lr.costs[0])
     vlr = Visualization(lr)
