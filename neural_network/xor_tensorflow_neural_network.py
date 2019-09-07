@@ -133,18 +133,18 @@ class XORNN:
 
 if __name__ == "__main__":
 
-    max_iter = 10000
+    max_iter = 20000
     learning_rate = 0.1
     tanh = XORNN(
         max_iteration=max_iter,
         learning_rate=learning_rate,
-        cost_function_type="mean-square",
+        cost_function_type="cross-entropy",
         hidden_node_act="tanh",
     )
     sigmoid = XORNN(
         max_iteration=max_iter,
         learning_rate=learning_rate,
-        cost_function_type="mean-square",
+        cost_function_type="cross-entropy",
         hidden_node_act="sigmoid",
     )
 
@@ -186,6 +186,6 @@ if __name__ == "__main__":
         }
     )
 
-    tdf.to_csv("xor-tanh-mse.csv", index=False)
-    sdf.to_csv("xor-sigmoid-mse.csv", index=False)
+    tdf.to_csv("xor-tanh-cross.csv", index=False)
+    sdf.to_csv("xor-sigmoid-cross.csv", index=False)
 

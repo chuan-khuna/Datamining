@@ -18,8 +18,8 @@ def compare_plot(iteration, data_arr, label_arr, x_label, y_label):
 
 
 if __name__ == "__main__":
-    sdf = pd.read_csv('xor-sigmoid-cross-v1.csv')
-    tdf = pd.read_csv('xor-tanh-cross-v1.csv')
+    sdf = pd.read_csv('xor-sigmoid-cross.csv')
+    tdf = pd.read_csv('xor-tanh-cross.csv')
     iteration = tdf['iteration']
 
     # # plot cost
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     # plot hidden layer boundary
     x_val = np.arange(-2, 2, 0.2)
     w0, w1, w2 = np.array(
-        tdf['l1_n1_w0'])[-1], np.array(sdf['l1_n1_w1'])[-1], np.array(sdf['l1_n1_w2'])[-1]
+        sdf['l1_n1_w0'])[-1], np.array(sdf['l1_n1_w1'])[-1], np.array(sdf['l1_n1_w2'])[-1]
     y_val = -(w1*x_val + w0)/w2
     sns.lineplot(x_val, y_val, label='node 1')
     w0, w1, w2 = np.array(

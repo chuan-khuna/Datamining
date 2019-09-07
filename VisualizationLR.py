@@ -49,7 +49,7 @@ class Visualization:
         return w0, w1, x0, x1, costs
 
     def animation_expected_predicted(self, delay=0.001):
-        fig = plt.figure('Linear Regression Animation', figsize=(10, 5))
+        fig = plt.figure('Linear Regression Animation', figsize=(9, 5), dpi=100)
         plt.ion()
 
         for i, p in enumerate(self.parameters):
@@ -75,6 +75,7 @@ class Visualization:
             plt.ylabel("y")
             plt.grid(True, alpha=0.5)
             plt.draw()
+            fig.savefig(f"./animation/{i}.png", dpi=100)
             plt.pause(delay)
         plt.ioff()
         plt.show()
@@ -207,8 +208,8 @@ class Visualization:
 
 if __name__ == "__main__":
     num_sample = 100
-    max_iteration = 100
-    learning_rate = 0.0001
+    max_iteration = 200
+    learning_rate = 0.0005
 
     # expected y = mx + c
     m = 2
@@ -226,7 +227,7 @@ if __name__ == "__main__":
     print("Cost: {}".format(lr.costs[-1]))
     print("Initial cost:", lr.costs[0])
     vlr = Visualization(lr)
-    # vlr.animation_expected_predicted()
+    vlr.animation_expected_predicted()
     # vlr.expected_predicted()
     # vlr.cost_iteration()
     # vlr.animation_contour_cost()
