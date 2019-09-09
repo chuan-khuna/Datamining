@@ -75,7 +75,6 @@ class Visualization:
             plt.ylabel("y")
             plt.grid(True, alpha=0.5)
             plt.draw()
-            fig.savefig(f"./animation/{i}.png", dpi=100)
             plt.pause(delay)
         plt.ioff()
         plt.show()

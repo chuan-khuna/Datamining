@@ -96,11 +96,11 @@ if __name__ == "__main__":
     sns.set_palette("muted")
     sns.set_context('notebook', font_scale=1.25, rc={"lines.linewidth": 3})
 
-    ds = pd.read_csv('iris2class.csv')
+    ds = pd.read_csv('iris.csv')
     ds = ds.iloc[:, 3:5]
     xy = np.array(ds)
 
-    k = 2
+    k = 3
     kmn = Kmean(xy, k)
     kmn.doKmean(1000)
 
