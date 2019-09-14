@@ -67,6 +67,7 @@ if __name__ == "__main__":
 
     otsu_img = Image.new("L", img.size)
     otsu_img.putdata(np.where(bw_px < otsu.threshold, 0, 255))
+    otsu_img.save("Otsu.jpg")
 
     fig, axs = plt.subplots(2, 1, figsize=(8, 6), dpi=150, sharex=True)
     sns.distplot(bw_px, bins=color_range, ax=axs[0])
@@ -78,8 +79,12 @@ if __name__ == "__main__":
     plt.show()
 
 
-    sns.set_style("white")
-    fig, axs = plt.subplots(1, 2, dpi=150)
+    fig, axs = plt.subplots(1, 3, dpi=150)
     axs[0].imshow(np.asarray(img))
-    axs[1].imshow(np.asarray(otsu_img))
+    axs[1].imshow(np.asarray(bw), cmap="gray", vmin=0, vmax=255)
+    axs[2].imshow(np.asarray(otsu_img), cmap="gray", vmin=0, vmax=255)
+    for ax in axs:
+        ax.grid(False)
+        ax.set_xticks([], [])
+        ax.set_yticks([], [])
     plt.show()
