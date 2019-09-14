@@ -1,15 +1,10 @@
 import numpy as np
 
+
 class Otsu:
     def __init__(self):
-        """
-
-        """
         self.threshold = 0
         self.inter_class_var = []
-
-    def mse(self, a, b):
-        return np.mean((a-b)**2)
 
     def fit(self, hist_counts, hist_val):
         self.counts = hist_counts
@@ -25,19 +20,20 @@ class Otsu:
             c2_hist = self.counts[i:]
             w1 = np.sum(c1_hist)
             w2 = np.sum(c2_hist)
-            mu1 = np.sum(c1_val*c1_hist)/w1
-            mu2 = np.sum(c2_val*c2_hist)/w2
+            mu1 = np.sum(c1_val * c1_hist) / w1
+            mu2 = np.sum(c2_val * c2_hist) / w2
 
-            inter_class_var = (w1*w2) * (mu1-mu2)**2
+            inter_class_var = (w1 * w2) * (mu1 - mu2) ** 2
             if np.isnan(inter_class_var):
                 inter_class_var = -1
             self.inter_class_var.append(inter_class_var)
             if max_var < inter_class_var:
                 max_var = inter_class_var
                 max_ind = i
-        
+
         self.threshold = self.hist_val[max_ind]
         self.inter_class_var = np.array(self.inter_class_var)
+
 
 if __name__ == "__main__":
 
@@ -46,11 +42,11 @@ if __name__ == "__main__":
     import seaborn as sns
     import matplotlib.pyplot as plt
     import numpy as np
+
     sns.set_style("whitegrid")
     colors = sns.color_palette("muted")
     sns.set_palette(colors)
-    sns.set_context('paper', font_scale=1.25, rc={"lines.linewidth": 3})
-
+    sns.set_context("paper", font_scale=1.25, rc={"lines.linewidth": 3})
 
     img = Image.open("sniper.jpg")
     bw = img.convert("L")
@@ -77,7 +73,6 @@ if __name__ == "__main__":
     plt.axvline(theshold, color=colors[1], label=f"threshold: {theshold}")
     plt.legend()
     plt.show()
-
 
     fig, axs = plt.subplots(1, 3, dpi=150)
     axs[0].imshow(np.asarray(img))
