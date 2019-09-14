@@ -37,9 +37,9 @@ def KmeanImgCompress(file_name, kmn_centroid=4, kmn_iter=10):
     output_img.save(f'{file_name[:-4]}_Quantuzed.jpg')
 
 if __name__ == "__main__":
-    file_name = "sniper.jpg"
+    file_name = "dontstarve.jpg"
     color = 16
-    max_iteration = 10
+    max_iteration = 20
     start_time = time.time()
     kmn_img = KmeanImgCompress(file_name, color, max_iteration)
     elapsed = np.round(time.time() - start_time, 3)
