@@ -18,15 +18,8 @@ class Kmean:
             random initial centriod
         """
         # initial centroid limit
-        lim_max = np.max(self.xy_arr, axis=0)
-        lim_min = np.min(self.xy_arr, axis=0)
-
-        centroids = []
-        for c in range(self.k):
-            centroid = []
-            for i in range(len(lim_max)):
-                centroid.append(np.random.uniform(lim_min[i], lim_max[i]))
-            centroids.append(centroid)
+        rand_xy_ind = np.random.randint(0, len(self.xy_arr)-1, size=self.k)
+        centroids = np.take(self.xy_arr, rand_xy_ind, axis=0)
         self.centroids = np.array(centroids)
 
     def find_nearest_centroid(self, xy, centroids):
@@ -59,10 +52,10 @@ class Kmean:
         """
         new_centroids = []
         for i in range(self.k):
-            try:
+            if len(self.clusters[i]) > 0:
                 new_centroid = np.mean(self.clusters[i], axis=0)
                 new_centroids.append(new_centroid)
-            except:
+            else:
                 new_centroids.append(self.centroids[i])
         self.centroids = np.array(new_centroids)
 
@@ -93,21 +86,22 @@ if __name__ == "__main__":
     import seaborn as sns
     import matplotlib.pyplot as plt
     sns.set_style("whitegrid")
-    sns.set_palette("muted")
+    colors = sns.color_palette("muted")
+    sns.set_palette(colors)
     sns.set_context('notebook', font_scale=1.25, rc={"lines.linewidth": 3})
 
     ds = pd.read_csv('iris.csv')
-    ds = ds.iloc[:, 3:5]
-    xy = np.array(ds)
+    xy = np.array(ds.iloc[:, 3:5])
 
     k = 3
     kmn = Kmean(xy, k)
     kmn.doKmean(1000)
 
     fig = plt.figure(figsize=(9, 5), dpi=100)
+    sns.scatterplot(x="Petal.Length", y="Petal.Width", data=ds, hue="Species", s=150, marker="s")
     for i in range(k):
-        sns.scatterplot(kmn.clusters[i][:, 0], kmn.clusters[i][:, 1], s=100)
-        sns.scatterplot([kmn.centroids[i][0]],[kmn.centroids[i][1]], marker="X", s=200, color="k", alpha=0.75)
+        sns.scatterplot(kmn.clusters[i][:, 0], kmn.clusters[i][:, 1], s=50, color=colors[i])
+        sns.scatterplot([kmn.centroids[i][0]],[kmn.centroids[i][1]], marker="X", s=100, color="k", alpha=0.75)
     plt.xlabel('Petal Length')
     plt.ylabel('Petal Width')
     plt.show()
