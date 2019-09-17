@@ -21,9 +21,14 @@ clustering = DBSCAN(eps=0.15, min_samples=10)
 clustering.fit(X)
 
 predicted_label = clustering.labels_
+core_point = clustering.core_sample_indices_
+
+core_X = np.take(np.array(X), core_point, axis=0)
+print(core_X)
 
 fig = plt.figure(figsize=(8, 5), dpi=100)
 plt.title("DBSCAN")
 sns.scatterplot(X['Petal.Length'], X['Petal.Width'], hue=species, s=100, marker='s')
 sns.scatterplot(X['Petal.Length'], X['Petal.Width'], hue=predicted_label)
+sns.scatterplot(core_X[:, 0], core_X[:, 1], s=100, color='k')
 plt.show()
