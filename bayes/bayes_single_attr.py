@@ -54,7 +54,7 @@ def double_threshold_boundary(mu1, mu2, sigma1, sigma2):
     """
         boundary for bayes classification
         - single attribute
-        - sigma1 = sigma2
+        - sigma1 != sigma2
         - prior prob = gaussian (normal distribution)
 
         g(x) = -(x-(m))^2/(2(s)^2) - ln(s) + (x-(n))^2/(2(t)^2) + ln(t) = 0 
